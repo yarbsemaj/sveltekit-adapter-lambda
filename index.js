@@ -1,4 +1,4 @@
-const { copyFileSync, unlinkSync} = require('fs');
+const { copyFileSync, unlinkSync, existsSync, mkdirSync } = require('fs');
 const { join } = require('path');
 
 const esbuild = require('esbuild');
@@ -16,7 +16,13 @@ module.exports = function ({ out = 'build' } = {}) {
     async adapt(builder) {
 
       const static_directory = join(out, 'assets');
+      if (!existsSync(static_directory)) {
+        mkdirSync(static_directory, { recursive: true });
+      }
       const server_directory = join(out, 'server');
+      if (!existsSync(server_directory)) {
+        mkdirSync(server_directory, { recursive: true });
+      }
 
       builder.utils.log.minor('Copying assets');
       builder.utils.copy_client_files(static_directory);
