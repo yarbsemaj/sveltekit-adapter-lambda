@@ -1,0 +1,34 @@
+{
+  "name": "@yarbsemaj/adapter-serverless-lambda",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "An adapter for [SvelteKit](https://kit.svelte.dev/) for AWS Lambda via Lambda Proxy and API Gateway.  [Serverless](https://www.serverless.com/) deployment.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yarbsemaj/adapter-serverless-lambda.git"
+  },
+  "keywords": [
+    "sveltekit",
+    "lambda",
+    "api-gateway",
+    "AWS",
+    "adapter"
+  ],
+  "author": "James Bray <yarbsemaj.com> (https://yarbsemaj.com)",
+  "bugs": {
+    "url": "https://github.com/yarbsemaj/adapter-serverless-lambda/issues"
+  },
+  "homepage": "https://github.com/yarbsemaj/adapter-serverless-lambda#readme",
+  "main": "index.js",
+  "files": [
+    "files"
+  ],
+  "scripts": {
+    "build": "esbuild src/serverless.js --bundle --format=esm --platform=node --external:'../app.*' --outfile=files/serverless.js && cp src/shims.js files/shims.js ",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "esbuild": "0.10.1"
+  }
+}
