@@ -27,7 +27,6 @@ export async function handler(event) {
       statusCode: rendered.status
     }
     for (let k of rendered.headers.keys()){
-      console.log(k)
       const v = rendered.headers.get(k)
       if (v instanceof Array) {
         resp.multiValueHeaders[k] = v
