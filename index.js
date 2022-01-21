@@ -24,33 +24,34 @@ module.exports = function ({ out = 'build' } = {}) {
         mkdirSync(server_directory, { recursive: true });
       }
 
-      builder.utils.log.minor('Copying assets');
-      builder.utils.copy_client_files(static_directory);
-      builder.utils.copy_static_files(static_directory);
+      builder.log.minor('Copying assets');
+      builder.writeClient(static_directory);
+      builder.writeStatic(static_directory);
 
 
-      builder.utils.log.minor('Copying server');
-      builder.utils.copy_server_files(out);
+      builder.log.minor('Copying server');
+      builder.writeServer(out);
       copyFileSync(`${__dirname}/files/serverless.js`, `${server_directory}/_serverless.js`);
       copyFileSync(`${__dirname}/files/shims.js`, `${server_directory}/shims.js`);
 
 
-      builder.utils.log.minor('Building lambda');
+      builder.log.minor('Building lambda');
       esbuild.buildSync({
         entryPoints: [`${server_directory}/_serverless.js`],
         outfile: `${server_directory}/serverless.js`,
         inject: [join(`${server_directory}/shims.js`)],
+        external: ['node:*'],
         format: 'cjs',
         bundle: true,
         platform: 'node',
       });
 
-      builder.utils.log.minor('Prerendering static pages');
-      await builder.utils.prerender({
+      builder.log.minor('Prerendering static pages');
+      await builder.prerender({
         dest: `${static_directory}`,
       });
 
-      builder.utils.log.minor('Cleanup');
+      builder.log.minor('Cleanup');
       unlinkSync(`${server_directory}/_serverless.js`);
       unlinkSync(`${out}/app.js`);
     },
