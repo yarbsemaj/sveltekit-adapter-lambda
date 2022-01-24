@@ -29,7 +29,7 @@ Copy `serverless.yml` from the root of this repo to the root of your project
 
 After building your app run `sls deploy` to deploy code to AWS using the build tool [serverless](https://www.serverless.com/).
 
-Your app can then be accessed via the CloudFront distribution created as aprt of the stack.
+Your app can then be accessed via the CloudFront distribution created as a part of the stack.
 
 ## Static Assets and precompiled pages
 To server static assets and precompiled pages this adapter makes use of S3. In order to route traffic the correct destination a Lambda@edge fuction is used to perfrom a origin rewrite is used to redirect traffic to the S3 Bucket.
