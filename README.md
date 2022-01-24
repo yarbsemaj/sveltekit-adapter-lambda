@@ -27,7 +27,7 @@ const config = {
 ```
 Copy `serverless.yml` from the root of this repo to the root of your project
 
-After building your app run `sls deploy` to deploy code to AWS.
+After building your app run `sls deploy` to deploy code to AWS using build tool [serverless](https://www.serverless.com/).
 
 Your app can then be accessed via the CloudFront distribution created as aprt of the stack.
 
