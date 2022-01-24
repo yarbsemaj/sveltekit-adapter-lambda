@@ -1,0 +1,123 @@
+service: 'sveltekit-app'
+
+frameworkVersion: "2"
+
+plugins:
+  - '@silvermine/serverless-plugin-cloudfront-lambda-edge'
+  - serverless-s3-deploy
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+
+package:
+  individually: true
+  exclude:
+    - ./**
+  include:
+    - build/server/**
+    - build/edge/**
+
+custom:
+  #Config for S3 Upload lib
+  assets:
+    auto: true
+    targets:
+      - bucket: 
+          Ref: StaticAssets
+        files:
+          - source: ./build/assets/
+            globs: 
+              - '**'
+            empty: true
+            headers:
+              CacheControl: max-age=31104000
+
+
+functions:
+  #SSR Function
+  svelte:
+    handler: build/server/serverless.handler
+    memorySize: 256
+    timeout: 15
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+  #Router Function
+  cfLambda:
+    handler: build/edge/router.handler
+    memorySize: 128
+    timeout: 1
+    lambdaAtEdge:
+      distribution: 'WebsiteDistribution'
+      eventType: origin-request
+
+resources:
+  Resources:
+    StaticAssets:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: ${self:provider.stage}-${self:service}-static-assets
+
+    StaticAssetsS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: StaticAssets
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource:
+                Fn::Join: ["", ["arn:aws:s3:::", { "Ref": "StaticAssets" }, "/*"]]
+
+    WebsiteDistribution:
+      Type: 'AWS::CloudFront::Distribution'
+      Properties:
+        DistributionConfig:
+          Origins:
+            -
+              DomainName: { "Fn::Join" : ["", [{ "Ref" : "ApiGatewayRestApi" }, ".execute-api.${self:provider.region}.amazonaws.com" ] ]  }
+              OriginPath: /${self:provider.stage}
+              Id: default
+              OriginCustomHeaders: 
+                #Lambda@edge does not support ENV vars, so instead we have to pass in a customHeaders.
+                -
+                  HeaderName: 's3-host'
+                  HeaderValue: '${self:provider.stage}-${self:service}-static-assets.s3.amazonaws.com'
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: 'https-only'
+          Enabled: true
+          Comment: '${self:service}_${self:provider.stage}'
+          DefaultCacheBehavior:
+            TargetOriginId: default
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            MinTTL: 0
+            MaxTTL: 2592000
+            DefaultTTL: 60
+            ForwardedValues:
+              Cookies:
+                Forward: all
+              QueryString: True
+            ViewerProtocolPolicy: 'redirect-to-https'

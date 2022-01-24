@@ -11,14 +11,14 @@ export async function handler(event) {
 
   let rawURL = `https://${requestContext.domainName}${path}${parseQuery(multiValueQueryStringParameters)}`
 
-  console.log(rawURL)
-
+  //Render the app
   const rendered = await app.render(new Request(rawURL, {
     method: httpMethod,
     headers: new Headers(headers),
     body: rawBody,
   }));
 
+  //Parse the response into lambda proxy response
   if (rendered) {
     const resp = {
       headers: {},
