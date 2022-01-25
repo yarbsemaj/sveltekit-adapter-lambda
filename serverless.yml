@@ -113,9 +113,6 @@ resources:
               - GET
               - HEAD
               - OPTIONS
-            MinTTL: 0
-            MaxTTL: 2592000
-            DefaultTTL: 60
             ForwardedValues:
               Cookies:
                 Forward: all

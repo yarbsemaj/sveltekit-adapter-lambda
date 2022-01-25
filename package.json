@@ -1,6 +1,6 @@
 {
   "name": "@yarbsemaj/adapter-lambda",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "description": "An adapter for [SvelteKit](https://kit.svelte.dev/) for AWS Lambda via Lambda Proxy and API Gateway.  [Serverless](https://www.serverless.com/) deployment.",
   "repository": {
