@@ -22,7 +22,6 @@ package:
     - build/edge/**
 
 custom:
-  #Config for S3 Upload lib
   assets:
     auto: true
     targets:
@@ -35,6 +34,12 @@ custom:
             empty: true
             headers:
               CacheControl: max-age=31104000
+          - source: ./build/prerendered/
+            globs: 
+              - '**'
+            empty: true
+            headers:
+              CacheControl: max-age=60
 
 
 functions:
@@ -101,6 +106,7 @@ resources:
           Comment: '${self:service}_${self:provider.stage}'
           DefaultCacheBehavior:
             TargetOriginId: default
+            Compress: true
             AllowedMethods:
               - DELETE
               - GET

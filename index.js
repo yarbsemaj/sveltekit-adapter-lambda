@@ -1,4 +1,4 @@
-const { copyFileSync, unlinkSync, existsSync, mkdirSync, statSync, readdirSync, writeFileSync } = require('fs');
+const { copyFileSync, unlinkSync, existsSync, statSync, mkdirSync, emptyDirSync, readdirSync, writeFileSync } = require('fs-extra');
 const { join } = require('path');
 
 const esbuild = require('esbuild');
@@ -14,11 +14,18 @@ module.exports = function ({ out = 'build' } = {}) {
     name: 'adapter-serverless',
 
     async adapt(builder) {
+      emptyDirSync(out);
 
       const static_directory = join(out, 'assets');
       if (!existsSync(static_directory)) {
         mkdirSync(static_directory, { recursive: true });
       }
+
+      const prerendered_directory = join(out, 'prerendered');
+      if (!existsSync(static_directory)) {
+        mkdirSync(static_directory, { recursive: true });
+      }
+
       const server_directory = join(out, 'server');
       if (!existsSync(server_directory)) {
         mkdirSync(server_directory, { recursive: true });
@@ -53,12 +60,13 @@ module.exports = function ({ out = 'build' } = {}) {
 
       builder.log.minor('Prerendering static pages');
       await builder.prerender({
-        dest: `${static_directory}`,
+        dest: `${prerendered_directory}`,
       });
 
       console.log('Building router');
       copyFileSync(`${__dirname}/files/router.js`, `${edge_directory}/_router.js`);
-      writeFileSync(`${edge_directory}/static.js`, `export default ${JSON.stringify(getAllFiles(static_directory))}`)
+      let files = JSON.stringify([...getAllFiles(static_directory), ...getAllFiles(prerendered_directory)])
+      writeFileSync(`${edge_directory}/static.js`, `export default ${files}`)
 
       esbuild.buildSync({
         entryPoints: [`${edge_directory}/_router.js`],
