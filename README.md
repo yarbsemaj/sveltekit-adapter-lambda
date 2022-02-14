@@ -8,15 +8,15 @@ npm install --save-dev @yarbsemaj/adapter-lambda
 ```
 ## Usage
 
-In your `svelte.config.cjs` configure the adapter as bellow;
+In your `svelte.config.js` configure the adapter as bellow;
 
 ```js
-import preprocess from 'svelte-preprocess';
+import preprocess from 'svelte-preprocess'; //Optional
 import serverless from '@yarbsemaj/adapter-lambda';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: preprocess(),
+  preprocess: preprocess(), //Optional
 
   kit: {
     target: '#svelte',
@@ -24,6 +24,8 @@ const config = {
   },
 
 };
+
+export default config;
 ```
 Copy `serverless.yml` from the root of this repo to the root of your project
 
