@@ -1,6 +1,6 @@
 # adapter-lambda for SvelteKit
 
-An adapter to build a [SvelteKit](https://kit.svelte.dev/) app into a lambda ready for deployment with lambda proxy.
+An adapter to build a [SvelteKit](https://kit.svelte.dev/) app into a lambda ready for deployment with lambda proxy via the Serverless framework.
 
 ## Installation
 ```
