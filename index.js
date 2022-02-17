@@ -22,8 +22,8 @@ module.exports = function ({ out = 'build' } = {}) {
       }
 
       const prerendered_directory = join(out, 'prerendered');
-      if (!existsSync(static_directory)) {
-        mkdirSync(static_directory, { recursive: true });
+      if (!existsSync(prerendered_directory)) {
+        mkdirSync(prerendered_directory, { recursive: true });
       }
 
       const server_directory = join(out, 'server');
