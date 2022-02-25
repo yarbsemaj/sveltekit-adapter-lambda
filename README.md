@@ -19,7 +19,6 @@ const config = {
   preprocess: preprocess(), //Optional
 
   kit: {
-    target: '#svelte',
     adapter: serverless(),
   },
 

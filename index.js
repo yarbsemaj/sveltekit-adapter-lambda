@@ -80,7 +80,7 @@ module.exports = function ({ out = 'build' } = {}) {
       builder.log.minor('Cleanup');
       unlinkSync(`${server_directory}/_serverless.js`);
       unlinkSync(`${edge_directory}/_router.js`);
-      unlinkSync(`${out}/app.js`);
+      unlinkSync(`${out}/index.js`);
     },
   };
 

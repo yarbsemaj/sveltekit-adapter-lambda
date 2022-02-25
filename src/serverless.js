@@ -1,9 +1,8 @@
-import { App } from '../app.js';
+import { Server } from '../index.js';
 import { manifest } from '../manifest.js';
 
 export async function handler(event) {
-  console.log(event)
-  const app = new App(manifest);
+  const app = new Server(manifest);
   const { path, headers, multiValueQueryStringParameters, body, httpMethod, requestContext, isBase64Encoded } = event;
 
   const encoding = isBase64Encoded ? 'base64' : headers['content-encoding'] || 'utf-8';
@@ -12,7 +11,7 @@ export async function handler(event) {
   let rawURL = `https://${requestContext.domainName}${path}${parseQuery(multiValueQueryStringParameters)}`
 
   //Render the app
-  const rendered = await app.render(new Request(rawURL, {
+  const rendered = await app.respond(new Request(rawURL, {
     method: httpMethod,
     headers: new Headers(headers),
     body: rawBody,
