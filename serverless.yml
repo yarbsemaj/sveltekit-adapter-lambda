@@ -10,7 +10,7 @@ provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
-  region: us-east-1
+  region: us-east-1 #Lambda@Edge must be deployed in us-east-1
   stage: ${opt:stage, 'dev'}
 
 package:
