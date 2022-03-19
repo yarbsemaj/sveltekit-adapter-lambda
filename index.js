@@ -59,9 +59,7 @@ module.exports = function ({ out = 'build' } = {}) {
       });
 
       builder.log.minor('Prerendering static pages');
-      await builder.prerender({
-        dest: `${prerendered_directory}`,
-      });
+      await builder.writePrerendered(prerendered_directory);
 
       console.log('Building router');
       copyFileSync(`${__dirname}/files/router.js`, `${edge_directory}/_router.js`);

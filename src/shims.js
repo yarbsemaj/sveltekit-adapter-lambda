@@ -1,3 +1,2 @@
-import fetch from 'node-fetch';
-import {Response, Request, Headers } from 'node-fetch';
-export {fetch, Response, Request, Headers }
+import { installFetch } from '@sveltejs/kit/install-fetch';
+installFetch();
