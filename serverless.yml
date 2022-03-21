@@ -49,8 +49,8 @@ functions:
     memorySize: 256
     timeout: 15
     events:
-      - http: ANY /
-      - http: ANY /{proxy+}
+      - httpApi: ANY /
+      - httpApi: ANY /{proxy+}
 
   #Router Function
   cfLambda:
@@ -90,8 +90,7 @@ resources:
         DistributionConfig:
           Origins:
             -
-              DomainName: { "Fn::Join" : ["", [{ "Ref" : "ApiGatewayRestApi" }, ".execute-api.${self:provider.region}.amazonaws.com" ] ]  }
-              OriginPath: /${self:provider.stage}
+              DomainName: { "Fn::Join" : ["", [{ "Ref" : "HttpApi" }, ".execute-api.${self:provider.region}.amazonaws.com" ] ]  }
               Id: default
               OriginCustomHeaders: 
                 #Lambda@edge does not support ENV vars, so instead we have to pass in a customHeaders.
