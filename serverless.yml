@@ -48,9 +48,7 @@ functions:
     handler: build/server/serverless.handler
     memorySize: 256
     timeout: 15
-    events:
-      - httpApi: ANY /
-      - httpApi: ANY /{proxy+}
+    url: true
 
   #Router Function
   cfLambda:
@@ -90,7 +88,7 @@ resources:
         DistributionConfig:
           Origins:
             -
-              DomainName: { "Fn::Join" : ["", [{ "Ref" : "HttpApi" }, ".execute-api.${self:provider.region}.amazonaws.com" ] ]  }
+              DomainName: !Select [2, !Split ["/", !GetAtt ["SvelteLambdaFunctionUrl", "FunctionUrl"]]]
               Id: default
               OriginCustomHeaders: 
                 #Lambda@edge does not support ENV vars, so instead we have to pass in a customHeaders.
