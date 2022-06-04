@@ -1,6 +1,6 @@
 service: 'sveltekit-app'
 
-frameworkVersion: "2"
+frameworkVersion: "3"
 
 plugins:
   - '@silvermine/serverless-plugin-cloudfront-lambda-edge'
