@@ -1,5 +1,5 @@
 const { copyFileSync, unlinkSync, existsSync, statSync, mkdirSync, emptyDirSync, readdirSync, writeFileSync } = require('fs-extra');
-const { join } = require('path');
+const path = require('path');
 
 const esbuild = require('esbuild');
 
@@ -16,22 +16,22 @@ module.exports = function ({ out = 'build' } = {}) {
     async adapt(builder) {
       emptyDirSync(out);
 
-      const static_directory = join(out, 'assets');
+      const static_directory = path.join(out, 'assets');
       if (!existsSync(static_directory)) {
         mkdirSync(static_directory, { recursive: true });
       }
 
-      const prerendered_directory = join(out, 'prerendered');
+      const prerendered_directory = path.join(out, 'prerendered');
       if (!existsSync(prerendered_directory)) {
         mkdirSync(prerendered_directory, { recursive: true });
       }
 
-      const server_directory = join(out, 'server');
+      const server_directory = path.join(out, 'server');
       if (!existsSync(server_directory)) {
         mkdirSync(server_directory, { recursive: true });
       }
 
-      const edge_directory = join(out, 'edge');
+      const edge_directory = path.join(out, 'edge');
       if (!existsSync(edge_directory)) {
         mkdirSync(edge_directory, { recursive: true });
       }
@@ -51,7 +51,7 @@ module.exports = function ({ out = 'build' } = {}) {
       esbuild.buildSync({
         entryPoints: [`${server_directory}/_serverless.js`],
         outfile: `${server_directory}/serverless.js`,
-        inject: [join(`${server_directory}/shims.js`)],
+        inject: [path.join(`${server_directory}/shims.js`)],
         external: ['node:*'],
         format: 'cjs',
         bundle: true,
@@ -95,7 +95,7 @@ const getAllFiles = function (dirPath, basePath, arrayOfFiles) {
     if (statSync(dirPath + "/" + file).isDirectory()) {
       arrayOfFiles = getAllFiles(dirPath + "/" + file, basePath, arrayOfFiles)
     } else {
-      arrayOfFiles.push(join("/", dirPath.replace(basePath, ''), "/", file))
+      arrayOfFiles.push(path.join("/", dirPath.replace(basePath, ''), "/", file))
     }
   })
 
