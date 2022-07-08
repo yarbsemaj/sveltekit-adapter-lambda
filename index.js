@@ -99,5 +99,10 @@ const getAllFiles = function (dirPath, basePath, arrayOfFiles) {
     }
   })
 
+  if (path.sep == "\\")
+  {
+    arrayOfFiles = arrayOfFiles.map(file => file.replaceAll("\\", "/"))
+  }
+
   return arrayOfFiles
 }
