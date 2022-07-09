@@ -1,5 +1,5 @@
 const { copyFileSync, unlinkSync, existsSync, statSync, mkdirSync, emptyDirSync, readdirSync, writeFileSync } = require('fs-extra');
-const { join } = require('path');
+const { join } = require('path/posix');
 
 const esbuild = require('esbuild');
 
