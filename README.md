@@ -26,7 +26,7 @@ const config = {
 
 export default config;
 ```
-Copy `serverless.yml` from the root of this repo to the root of your project
+Copy `serverless.yml` from the root of this repo to the root of your project, make sure to change the service name in `serverless.yml`.
 
 After building your app run `sls deploy` to deploy code to AWS using the build tool [serverless](https://www.serverless.com/).
 
