@@ -26,7 +26,7 @@ const config = {
 
 export default config;
 ```
-Copy `serverless.yml` from the root of this repo to the root of your project, make sure to change the service name in `serverless.yml`.
+Copy `serverless.yml` from the root of this repo to the root of your project, make sure to change the service name.
 
 After building your app run `sls deploy` to deploy code to AWS using the build tool [serverless](https://www.serverless.com/).
 
@@ -41,6 +41,7 @@ As SvelteKit is still in early development, there are often breaking changes mad
 ## Versions
 | Adapter Version| Sveltekit Version |
 | ---------------| ----------------- |
+| 0.10.x         | 1.0.0-next.380    |
 | 0.9.x          | 1.0.0-next.348    |
 | 0.6.x - 0.8.x  | 1.0.0-next.301    |
 | 0.5.x          | 1.0.0-next.286    |

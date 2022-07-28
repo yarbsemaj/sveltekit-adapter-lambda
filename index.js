@@ -38,8 +38,6 @@ module.exports = function ({ out = 'build' } = {}) {
 
       builder.log.minor('Copying assets');
       builder.writeClient(static_directory);
-      builder.writeStatic(static_directory);
-
 
       builder.log.minor('Copying server');
       builder.writeServer(out);
