@@ -15,7 +15,7 @@ export async function handler(event) {
 
   let rawURL = `https://${requestContext.domainName}${rawPath}${rawQueryString ? `?${rawQueryString}` : ''}`
 
-  app.init({
+  await app.init({
 		env: process.env
 	});
 

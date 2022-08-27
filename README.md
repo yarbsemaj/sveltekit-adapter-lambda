@@ -41,6 +41,7 @@ As SvelteKit is still in early development, there are often breaking changes mad
 ## Versions
 | Adapter Version| Sveltekit Version |
 | ---------------| ----------------- |
+| 0.12.x         | 1.0.0-next.433    |
 | 0.11.x         | 1.0.0-next.401    |
 | 0.10.x         | 1.0.0-next.380    |
 | 0.9.x          | 1.0.0-next.348    |
