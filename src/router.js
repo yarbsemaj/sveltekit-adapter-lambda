@@ -12,7 +12,7 @@ exports.handler = (event, context, callback) => {
   if (uri.slice(-1) === "/") {
     uri += "index.html";
   }
-  if (static_default.includes(uri)) {
+  if (staticFiles.includes(uri)) {
     request.uri = uri;
   } else {
     const domainName = request.origin.s3.customHeaders["lambda-domain"][0].value;
