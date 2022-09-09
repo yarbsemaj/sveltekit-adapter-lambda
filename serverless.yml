@@ -1,9 +1,9 @@
-service: 'sveltekit-app'
+service: "sveltekit-app"
 
 frameworkVersion: "3"
 
 plugins:
-  - '@silvermine/serverless-plugin-cloudfront-lambda-edge'
+  - "@silvermine/serverless-plugin-cloudfront-lambda-edge"
   - serverless-s3-deploy
 
 provider:
@@ -25,22 +25,21 @@ custom:
   assets:
     auto: true
     targets:
-      - bucket: 
+      - bucket:
           Ref: StaticAssets
         files:
           - source: ./build/assets/
-            globs: 
-              - '**'
+            globs:
+              - "**"
             empty: true
             headers:
               CacheControl: max-age=31104000
           - source: ./build/prerendered/
-            globs: 
-              - '**'
+            globs:
+              - "**"
             empty: true
             headers:
               CacheControl: max-age=60
-
 
 functions:
   #SSR Function
@@ -56,7 +55,7 @@ functions:
     memorySize: 128
     timeout: 1
     lambdaAtEdge:
-      distribution: 'WebsiteDistribution'
+      distribution: "WebsiteDistribution"
       eventType: origin-request
 
 resources:
@@ -64,7 +63,6 @@ resources:
     StaticAssets:
       Type: AWS::S3::Bucket
       Properties:
-        AccessControl: PublicRead
         BucketName: ${self:provider.stage}-${self:service}-static-assets
 
     StaticAssetsS3BucketPolicy:
@@ -74,35 +72,54 @@ resources:
           Ref: StaticAssets
         PolicyDocument:
           Statement:
-            - Sid: PublicReadGetObject
+            - Sid: PolicyForCloudFrontPrivateContent
               Effect: Allow
-              Principal: "*"
+              Principal:
+                AWS:
+                  Fn::Join:
+                    [
+                      "",
+                      ["arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ", { "Ref": "StaticAssetsOAI" }],
+                    ]
               Action:
                 - s3:GetObject
               Resource:
                 Fn::Join: ["", ["arn:aws:s3:::", { "Ref": "StaticAssets" }, "/*"]]
 
+    StaticAssetsOAI:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: "Access Identity for ${self:service} (${self:provider.stage})"
+
     WebsiteDistribution:
-      Type: 'AWS::CloudFront::Distribution'
+      Type: "AWS::CloudFront::Distribution"
       Properties:
         DistributionConfig:
           Origins:
-            -
-              DomainName: !Select [2, !Split ["/", !GetAtt ["SvelteLambdaFunctionUrl", "FunctionUrl"]]]
-              Id: default
-              OriginCustomHeaders: 
+            - DomainName: !Select [2, !Split ["/", !GetAtt ["SvelteLambdaFunctionUrl", "FunctionUrl"]]]
+              Id: svelte-server
+              OriginCustomHeaders:
                 #Lambda@edge does not support ENV vars, so instead we have to pass in a customHeaders.
-                -
-                  HeaderName: 's3-host'
-                  HeaderValue: '${self:provider.stage}-${self:service}-static-assets.s3.amazonaws.com'
+                - HeaderName: "s3-host"
+                  HeaderValue: "${self:provider.stage}-${self:service}-static-assets.s3.amazonaws.com"
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
-                OriginProtocolPolicy: 'https-only'
+                OriginProtocolPolicy: "https-only"
+            - DomainName: !GetAtt ["StaticAssets", "DomainName"]
+              Id: static-assets
+              OriginCustomHeaders:
+                #Lambda@edge does not support ENV vars, so instead we have to pass in a customHeaders.
+                - HeaderName: "lambda-domain"
+                  HeaderValue: !Select [2, !Split ["/", !GetAtt ["SvelteLambdaFunctionUrl", "FunctionUrl"]]]
+              S3OriginConfig:
+                OriginAccessIdentity:
+                  Fn::Join: ["", ["origin-access-identity/cloudfront/", { "Ref": "StaticAssetsOAI" }]]
           Enabled: true
-          Comment: '${self:service}_${self:provider.stage}'
+          Comment: "${self:service}_${self:provider.stage}"
           DefaultCacheBehavior:
-            TargetOriginId: default
+            TargetOriginId: static-assets
             Compress: true
             AllowedMethods:
               - DELETE
@@ -120,4 +137,4 @@ resources:
               Cookies:
                 Forward: all
               QueryString: True
-            ViewerProtocolPolicy: 'redirect-to-https'
+            ViewerProtocolPolicy: "redirect-to-https"
