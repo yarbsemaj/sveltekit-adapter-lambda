@@ -2,7 +2,7 @@ import { Server } from '../index.js';
 import { manifest } from '../manifest.js';
 import { splitCookiesString } from 'set-cookie-parser';
 
-export async function handler(event) {
+export async function handler(event, context) {
   const app = new Server(manifest);
   const { rawPath, headers, rawQueryString, body, requestContext, isBase64Encoded, cookies } = event;
 
@@ -24,7 +24,9 @@ export async function handler(event) {
     method: requestContext.http.method,
     headers: new Headers(headers),
     body: rawBody,
-  }));
+  }),{
+    platform: { context }
+  });
 
   //Parse the response into lambda proxy response
   if (rendered) {
