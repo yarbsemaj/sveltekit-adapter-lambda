@@ -64,8 +64,15 @@ resources:
     StaticAssets:
       Type: AWS::S3::Bucket
       Properties:
-        AccessControl: PublicRead
         BucketName: ${self:provider.stage}-${self:service}-static-assets
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerPreferred
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
 
     StaticAssetsS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
