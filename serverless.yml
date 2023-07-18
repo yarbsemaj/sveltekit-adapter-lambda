@@ -124,7 +124,26 @@ resources:
               - HEAD
               - OPTIONS
             ForwardedValues:
+              Headers:
+                - x-forwarded-host
               Cookies:
                 Forward: all
               QueryString: True
             ViewerProtocolPolicy: 'redirect-to-https'
+            FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt XForwardFunction.FunctionMetadata.FunctionARN
+
+    XForwardFunction:
+      Type: AWS::CloudFront::Function
+      Properties:
+        AutoPublish: true
+        Name: "${self:provider.stage}-${self:service}-XForwardFunction"
+        FunctionCode: !Sub |
+          function handler(event) {
+            event.request.headers['x-forwarded-host'] = event.request.headers['host']
+            return event.request
+          }
+        FunctionConfig:
+          Comment: 'Add x-forwarded-host'
+          Runtime: cloudfront-js-1.0

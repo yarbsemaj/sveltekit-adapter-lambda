@@ -45,6 +45,7 @@ Please raise an issue on [Github](https://github.com/yarbsemaj/sveltekit-adapter
 ## Versions
 | Adapter Version| Sveltekit Version |
 | ---------------| ----------------- |
+| 1.1.x          | 1.22.0 (Official) |
 | 1.x.x          | 1.0.0 (Official)  |
 | 0.12.x         | 1.0.0-next.433    |
 | 0.11.x         | 1.0.0-next.401    |
