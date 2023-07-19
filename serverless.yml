@@ -9,7 +9,6 @@ plugins:
 provider:
   name: aws
   runtime: nodejs16.x
-  lambdaHashingVersion: 20201221
   region: us-east-1 #Lambda@Edge must be deployed in us-east-1
   stage: ${opt:stage, 'dev'}
 
@@ -126,6 +125,7 @@ resources:
             ForwardedValues:
               Headers:
                 - x-forwarded-host
+                - authorization
               Cookies:
                 Forward: all
               QueryString: True
