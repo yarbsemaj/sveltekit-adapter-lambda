@@ -1,6 +1,6 @@
 {
   "name": "@yarbsemaj/adapter-lambda",
-  "version": "0.12.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "An adapter for [SvelteKit](https://kit.svelte.dev/) for AWS Lambda via Lambda Proxy and API Gateway.  [Serverless](https://www.serverless.com/) deployment.",
   "repository": {
@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@silvermine/serverless-plugin-cloudfront-lambda-edge": "^2.2.3",
-    "esbuild": "0.10.1",
+    "diagnostics_channel": "^1.1.0",
+    "esbuild": "^0.17.0",
     "fs-extra": "^10.0.0",
     "serverless": "^3.0.0",
     "serverless-s3-deploy": "^0.10.1",

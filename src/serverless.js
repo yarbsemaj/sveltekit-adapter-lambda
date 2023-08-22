@@ -2,18 +2,19 @@ import { Server } from '../index.js';
 import { manifest } from '../manifest.js';
 import { splitCookiesString } from 'set-cookie-parser';
 
-export async function handler(event) {
+export async function handler(event, context) {
   const app = new Server(manifest);
   const { rawPath, headers, rawQueryString, body, requestContext, isBase64Encoded, cookies } = event;
 
   const encoding = isBase64Encoded ? 'base64' : headers['content-encoding'] || 'utf-8';
+  const domainName = headers['x-forwarded-host']
   const rawBody = typeof body === 'string' ? Buffer.from(body, encoding) : body;
 
   if (cookies) {
     headers['cookie'] = cookies.join('; ')
   }
 
-  let rawURL = `https://${requestContext.domainName}${rawPath}${rawQueryString ? `?${rawQueryString}` : ''}`
+  let rawURL = `https://${domainName}${rawPath}${rawQueryString ? `?${rawQueryString}` : ''}`
 
   await app.init({
 		env: process.env
@@ -24,7 +25,9 @@ export async function handler(event) {
     method: requestContext.http.method,
     headers: new Headers(headers),
     body: rawBody,
-  }));
+  }),{
+    platform: { context }
+  });
 
   //Parse the response into lambda proxy response
   if (rendered) {
