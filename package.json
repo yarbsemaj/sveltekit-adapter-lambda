@@ -1,8 +1,8 @@
 {
   "name": "@yarbsemaj/adapter-lambda",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "MIT",
-  "description": "An adapter for [SvelteKit](https://kit.svelte.dev/) for AWS Lambda via Lambda Proxy and API Gateway.  [Serverless](https://www.serverless.com/) deployment.",
+  "description": "An adapter for [SvelteKit](https://kit.svelte.dev/) for AWS Lambda.  [Serverless](https://www.serverless.com/) or [CDK](https://aws.amazon.com/cdk/) deployment.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yarbsemaj/adapter-lambda.git"
@@ -12,7 +12,8 @@
     "lambda",
     "api-gateway",
     "AWS",
-    "adapter"
+    "adapter",
+    "CDK"
   ],
   "author": "James Bray <yarbsemaj.com> (https://yarbsemaj.com)",
   "bugs": {
@@ -35,5 +36,8 @@
     "serverless": "^3.0.0",
     "serverless-s3-deploy": "^0.10.1",
     "set-cookie-parser": "^2.5.0"
+  },
+  "devDependencies": {
+    "aws-cdk-lib": "^2.143.0"
   }
 }
