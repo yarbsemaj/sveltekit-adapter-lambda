@@ -32,6 +32,8 @@ Copy `serverless.yml` from the root of this repo to the root of your project, ma
 
 After building your app run `sls deploy` to deploy code to AWS using the build tool [serverless](https://www.serverless.com/).
 
+An example project using serverless can be found [here](https://github.com/yarbsemaj/sveltekit-serverless-starter).
+
 ### For CDK
 Copy `SvelteKitSite.ts` from the root of this repo into your project and add it to a CDK stack.
 
