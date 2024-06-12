@@ -58,7 +58,10 @@ export class SvelteKitSite extends Construct {
         }))
 
         const forwardHeaderFunction = new cdk.aws_cloudfront.Function(this, `${id}-forward-header-function`, {
-            code: cdk.aws_cloudfront.FunctionCode.fromInline('function handler(event) { return event.request }'),
+            code: cdk.aws_cloudfront.FunctionCode.fromInline(`function handler(event) {
+                event.request.headers['x-forwarded-host'] = event.request.headers['host']
+                return event.request
+          }`),
         });
 
         new cdk.aws_s3_deployment.BucketDeployment(this, `${id}-deploy-prerender`, {

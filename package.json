@@ -1,6 +1,6 @@
 {
   "name": "@yarbsemaj/adapter-lambda",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "description": "An adapter for [SvelteKit](https://kit.svelte.dev/) for AWS Lambda.  [Serverless](https://www.serverless.com/) or [CDK](https://aws.amazon.com/cdk/) deployment.",
   "repository": {

@@ -5,6 +5,9 @@ import staticFiles from './static.js'
 exports.handler = (event, context, callback) => {
   const request = event.Records[0].cf.request;
 
+  //Fix for sveltekit action urls
+  request.querystring = request.querystring.replace('/', '%2F');
+
   //Only send GET request to S3
   if (request.method !== 'GET') {
     callback(null, request);
