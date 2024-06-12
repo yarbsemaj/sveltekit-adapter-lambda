@@ -6,9 +6,10 @@ const esbuild = require('esbuild');
 /**
  * @param {{
  *   out?: string;
+ *   esbuildOverride?: import('esbuild').BuildOptions;
  * }} options
  */
-module.exports = function ({ out = 'build' } = {}) {
+module.exports = function ({ out = 'build', esbuildOverride = {} } = {}) {
   /** @type {import('@sveltejs/kit').Adapter} */
   const adapter = {
     name: 'adapter-serverless',
@@ -47,13 +48,15 @@ module.exports = function ({ out = 'build' } = {}) {
 
       builder.log.minor('Building lambda');
       esbuild.buildSync({
-        entryPoints: [`${server_directory}/_serverless.js`],
-        outfile: `${server_directory}/serverless.js`,
-        inject: [join(`${server_directory}/shims.js`)],
-        external: ['node:*'],
-        format: 'cjs',
-        bundle: true,
-        platform: 'node',
+        ...{
+          entryPoints: [`${server_directory}/_serverless.js`],
+          outfile: `${server_directory}/serverless.js`,
+          inject: [join(`${server_directory}/shims.js`)],
+          external: ['node:*'],
+          format: 'cjs',
+          bundle: true,
+          platform: 'node',
+        }, ...esbuildOverride
       });
 
       builder.log.minor('Prerendering static pages');
