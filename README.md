@@ -46,7 +46,7 @@ No matter how you deploy, your app can then be accessed via the CloudFront distr
 ## Options
 | Argument            | Description                                | Type    | Default |
 | ------------------- | ------------------------------------------ | ------- | ------- |
-| **out**             | the output directory of build files        | string  | out     |
+| **out**             | the output directory of build files        | string  | build   |
 | **esbuildOverride** | overrides for the [default esbuild options](https://github.com/yarbsemaj/sveltekit-adapter-lambda/blob/master/index.js#L69)  | [esbuild Build Options](https://github.com/evanw/esbuild/blob/fc37c2fa9de2ad77476a6d4a8f1516196b90187e/lib/shared/types.ts#L110) | {}     |
 
 ## Static Assets and precompiled pages
