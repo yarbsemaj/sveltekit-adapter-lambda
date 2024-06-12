@@ -98,7 +98,7 @@ export class SvelteKitSite extends Construct {
         const distribution = new cdk.aws_cloudfront.Distribution(this, `${id}-svelte-cloudfront`, {
             ...props?.cloudfrontProps,
             defaultBehavior: {
-                allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+                allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
                 origin: new cdk.aws_cloudfront_origins.HttpOrigin(cdk.Fn.select(2, cdk.Fn.split('/', svelteURL.url)), {
                     customHeaders: {
                         's3-host': staticAssets.virtualHostedUrlForObject().replace('https://', '')
